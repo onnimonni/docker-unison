@@ -51,7 +51,7 @@ You can then sync a local folder, using the unison client, to `/unison` in the c
 $ unison . socket://<docker>:5000/ -ignore 'Path .git' -auto -batch
 ```
 
-You can use `-repeat watch` when files change:
+You can use `-repeat watch` to sync everytime when files change:
 
 ```bash
 $ unison . socket://<docker>:5000/ -repeat watch -ignore 'Path .git' -auto -batch
