@@ -62,12 +62,15 @@ $ unison . socket://<docker>:5000/ -repeat watch -ignore 'Path .git' -auto -batc
 ## Installing Unison Locally
 Unison requires the version of the client (running on the host) and server (running in the container) to match.
 
+Docker images are versioned with the version of unison which is installed in the container.
+You can use `onnimonni/unison:2.48.4` image to use unison with 2.48.4 version.
+
 * 2.40.102 (available via `apt-get install unison` on Ubuntu 14.04, 14.10, 15.04)
 * 2.48.4 (available via `brew install unison` on Mac OS X) [default]
 
 Additional versions can be added easily on request. Open an Issue if you need another version.
 
-## Installing unison-fsmonitor on OSX
+## Installing unison-fsmonitor on OSX (unox)
 ```
 # This is dependency for unox
 $ pip install MacFSEvents
@@ -76,6 +79,8 @@ $ pip install MacFSEvents
 $ curl -o /usr/local/bin/unison-fsmonitor -L https://raw.githubusercontent.com/hnsl/unox/master/unox.py
 $ chmod +x /usr/local/bin/unison-fsmonitor
 ```
+## Credits
+Thanks for [leighmcculloch](https://github.com/leighmcculloch/docker-unison) for showing me how to use unison with docker.
 
 ## License
 This docker image is licensed under GPLv3 because Unison is licensed under GPLv3 and is included in the image. See LICENSE.
