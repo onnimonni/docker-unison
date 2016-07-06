@@ -43,6 +43,8 @@ unison:
     - UNISON_DIR=/var/www/project
   ports:
     - "5000:5000"
+  volumes:
+    - /var/www/project
 ```
 
 You can then sync a local folder, using the unison client, to `/unison` in the container with:
