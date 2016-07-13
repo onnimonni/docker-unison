@@ -1,6 +1,8 @@
 # Docker-Unison
 A docker volume container using [Unison](http://www.cis.upenn.edu/~bcpierce/unison/) for fast two-way folder sync. Created as an alternative to [slow docker for mac volumes on OS X](https://forums.docker.com/t/file-access-in-mounted-volumes-extremely-slow-cpu-bound/8076).
 
+This image is trying to be as minimal as possible and it only weights `14.41MB`.
+
 The docker image is available on Docker Hub:
 [registry.hub.docker.com/u/onnimonni/unison/](https://registry.hub.docker.com/u/onnimonni/unison/)
 
