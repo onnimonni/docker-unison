@@ -15,7 +15,7 @@ RUN apk add --update build-base curl bash && \
     make && \
     cp src/unison src/unison-fsmonitor /usr/local/bin && \
     # Remove build tools
-    apk del build-base curl emacs && \
+    apk del build-base curl emacs ocaml && \
     # Remove tmp files and caches
     rm -rf /var/cache/apk/* && \
     rm -rf /tmp/unison-${UNISON_VERSION}
