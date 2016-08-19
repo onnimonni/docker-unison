@@ -28,6 +28,18 @@ Next, you can launch a container connected with the volume under `/data`.
 $ docker run -it --volumes-from $CID ubuntu /bin/sh
 ```
 
+### Configuration
+This container has few envs that you can alter.
+
+`UNISON_DIR` - This is the directory which receives data from unison inside the container.
+This is also the directory which you can use in other containers with `volumes_from` directive.
+
+`UNISON_GID` - Group ID for the user running unison inside container.
+`UNISON_UID` - User ID for the user running unison inside container.
+
+`UNISON_USER` - User name for the sync user ( UID matters more )
+`UNISON_GROUP` - Group name for the sync user ( GID matters more )
+
 ### Docker Compose
 
 If you are using Docker Compose to manage a dev environment, use the `volumes_from` directive.
@@ -43,6 +55,8 @@ unison:
   image: onnimonni/unison
   environment:
     - UNISON_DIR=/var/www/project
+    - UNISON_UID=10000
+    - UNISON_GID=10000
   ports:
     - "5000:5000"
   volumes:
