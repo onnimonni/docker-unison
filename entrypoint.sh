@@ -1,11 +1,8 @@
 #!/usr/bin/env bash
 
-UNISON_UID=1000 # user id for user wordpress (set this to web container also)
-UNISON_GID=1001 # group id for group web (set this to web container also)
-
 # Create user and group for wordpress
-addgroup -g $UNISON_GID web
-adduser -u $UNISON_UID -g $UNISON_GID wordpress
+addgroup -g $UNISON_GID $UNISON_GROUP
+adduser -u $UNISON_UID -g $UNISON_GID $UNISON_USER
 
 # Create directory for filesync
 if [ ! -d "$UNISON_DIR" ]; then
@@ -14,7 +11,7 @@ if [ ! -d "$UNISON_DIR" ]; then
 fi
 
 # Change data owner
-chown -R wordpress:web $UNISON_DIR
+chown -R $UNISON_USER:$UNISON_GROUP $UNISON_DIR
 
 # Start process on path which we want to sync
 cd $UNISON_DIR
@@ -23,7 +20,7 @@ cd $UNISON_DIR
 trap 'kill -TERM $PID' TERM INT
 
 # Run unison server as user wordpress
-su -c "unison -socket 5000" wordpress &
+su -c "unison -socket 5000" $UNISON_USER &
 
 # Wait until the process is stopped
 PID=$!

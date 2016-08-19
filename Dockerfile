@@ -24,7 +24,16 @@ RUN apk add --update build-base curl bash && \
 ENV TZ="Europe/Helsinki" \
     LANG="C.UTF-8" \
     UNISON_DIR="/data" \
-    HOME="/root"
+    HOME="/tmp" \
+
+    ##
+    # Use 1000:1001 as default user
+    ##
+    UNISON_USER="unison" \
+    UNISON_GROUP="sync" \
+    UNISON_UID="1000" \
+    UNISON_GID="1001"
+
 
 # Install unison server script
 COPY entrypoint.sh /entrypoint.sh
