@@ -10,6 +10,17 @@ if [ ! -d "$UNISON_DIR" ]; then
     mkdir -p $UNISON_DIR >> /dev/null 2>&1
 fi
 
+# Create directory for unison meta
+if [ ! -d "$UNISON_DIR/.unison" ]; then
+    mkdir -p /unison >> /dev/null 2>&1
+    chown -R $UNISON_USER:$UNISON_GROUP /unison
+fi
+
+# Symlink .unison folder from user home directory to sync directory so that we only need 1 volume
+if [ ! -h "$UNISON_DIR/.unison" ]; then
+    ln -s /unison /home/$UNISON_USER/.unison >> /dev/null 2>&1
+fi
+
 # Change data owner
 chown -R $UNISON_USER:$UNISON_GROUP $UNISON_DIR
 
@@ -20,7 +31,7 @@ cd $UNISON_DIR
 trap 'kill -TERM $PID' TERM INT
 
 # Run unison server as user wordpress
-su -c "unison -socket 5000" $UNISON_USER &
+su -c "unison -socket 5000 " $UNISON_USER &
 
 # Wait until the process is stopped
 PID=$!
