@@ -35,9 +35,11 @@ This container has few envs that you can alter.
 This is also the directory which you can use in other containers with `volumes_from` directive.
 
 `UNISON_GID` - Group ID for the user running unison inside container.
+
 `UNISON_UID` - User ID for the user running unison inside container.
 
 `UNISON_USER` - User name for the sync user ( UID matters more )
+
 `UNISON_GROUP` - Group name for the sync user ( GID matters more )
 
 ### Docker Compose
