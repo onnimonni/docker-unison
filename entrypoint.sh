@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-# Create user and group for wordpress
+# Create unison user and group
 addgroup -g $UNISON_GID $UNISON_GROUP
-adduser -u $UNISON_UID -g $UNISON_GID $UNISON_USER
+adduser -u $UNISON_UID -G $UNISON_GROUP -s /bin/bash $UNISON_USER
 
 # Create directory for filesync
 if [ ! -d "$UNISON_DIR" ]; then
