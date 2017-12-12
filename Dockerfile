@@ -18,7 +18,8 @@ RUN apk add --update build-base curl bash && \
     apk del build-base curl emacs ocaml && \
     # Remove tmp files and caches
     rm -rf /var/cache/apk/* && \
-    rm -rf /tmp/unison-${UNISON_VERSION}
+    rm -rf /tmp/unison-${UNISON_VERSION} && \
+    deluser xfs
 
 # These can be overridden later
 ENV TZ="Europe/Helsinki" \
