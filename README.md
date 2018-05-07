@@ -83,10 +83,11 @@ $ unison . socket://<docker>:5000/ -repeat watch -ignore 'Path .git' -auto -batc
 Unison requires the version of the client (running on the host) and server (running in the container) to match.
 
 Docker images are versioned with the version of unison which is installed in the container.
-You can use `onnimonni/unison:2.48.4` image to use unison with 2.48.4 version.
+You can use `onnimonni/unison:2.51.2` image to use unison with 2.51.2 version.
 
 * 2.40.102 (available via `apt-get install unison` on Ubuntu 14.04, 14.10, 15.04)
-* 2.48.4 (available via `brew install unison` on Mac OS X) [default]
+* 2.48.4 (available via `apt install unison` on Ubuntu 18.04)
+* 2.51.2 (available via `brew install unison` on Mac OS X) [default]
 
 Additional versions can be added easily on request. Open an Issue if you need another version.
 
