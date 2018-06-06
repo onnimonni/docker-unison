@@ -26,7 +26,6 @@ ENV TZ="Europe/Helsinki" \
     LANG="C.UTF-8" \
     UNISON_DIR="/data" \
     HOME="/tmp" \
-
     ##
     # Use 1000:1001 as default user
     ##
