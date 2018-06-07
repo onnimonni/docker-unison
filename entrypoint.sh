@@ -27,15 +27,5 @@ chown -R $UNISON_USER:$UNISON_GROUP $UNISON_DIR
 # Start process on path which we want to sync
 cd $UNISON_DIR
 
-# Gracefully stop the process on 'docker stop'
-trap 'kill -TERM $PID' TERM INT
-
-# Run unison server as user wordpress
-su -c "unison -socket 5000 " $UNISON_USER &
-
-# Wait until the process is stopped
-PID=$!
-wait $PID
-trap - TERM INT
-wait $PID
-EXIT_STATUS=$?
+# Run unison server as UNISON_USER and pass signals through
+exec su-exec $UNISON_USER unison -socket 5000
