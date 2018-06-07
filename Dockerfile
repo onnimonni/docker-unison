@@ -5,7 +5,7 @@ ARG UNISON_VERSION=2.51.2
 
 # Install in one run so that build tools won't remain in any docker layers
 # Install build tools
-RUN apk add --update build-base curl bash && \
+RUN apk add --update build-base curl bash su-exec tini && \
     # Install ocaml & emacs from testing repositories
     apk add --update-cache --repository http://dl-4.alpinelinux.org/alpine/edge/testing/ ocaml emacs && \
     # Download & Install Unison
@@ -42,4 +42,4 @@ COPY entrypoint.sh /entrypoint.sh
 VOLUME /unison
 
 EXPOSE 5000
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["/sbin/tini", "--", "/entrypoint.sh"]
