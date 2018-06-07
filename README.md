@@ -13,7 +13,7 @@ The docker image is available on Docker Hub:
 First, you can launch a volume container exposing a volume with Unison.
 
 ```bash
-$ CID=$(docker run -d -p 5000:5000 -e UNISON_DIR=/data onnimonni/unison)
+$ CID=$(docker run -d -p 5000:5000 -e UNISON_DIR=/data -v /data onnimonni/unison)
 ```
 
 You can then sync a local folder to `$UNISON_DIR` (default value: `/data`) in the container with:
@@ -65,7 +65,7 @@ unison:
     - /var/www/project
 ```
 
-You can then sync a local folder, using the unison client, to `/unison` in the container with:
+You can then sync a local folder, using the unison client, to `/var/www/project` in the container with:
 
 ```bash
 $ unison . socket://<docker>:5000/ -ignore 'Path .git' -auto -batch
