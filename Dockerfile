@@ -1,41 +1,55 @@
-FROM alpine:edge
-MAINTAINER Onni Hakala <onni.hakala@geniem.com>
-
+ARG OCAML_VERSION=4.08.1
 ARG UNISON_VERSION=2.51.2
 
-# Install in one run so that build tools won't remain in any docker layers
-# Install build tools
-RUN apk add --update build-base curl bash su-exec tini && \
-    # Install ocaml & emacs from testing repositories
-    apk add --update-cache --repository http://dl-4.alpinelinux.org/alpine/edge/testing/ ocaml emacs && \
-    # Download & Install Unison
-    curl -L https://github.com/bcpierce00/unison/archive/v$UNISON_VERSION.tar.gz | tar zxv -C /tmp && \
-    cd /tmp/unison-${UNISON_VERSION} && \
-    sed -i -e 's/GLIBC_SUPPORT_INOTIFY 0/GLIBC_SUPPORT_INOTIFY 1/' src/fsmonitor/linux/inotify_stubs.c && \
-    make && \
-    cp src/unison src/unison-fsmonitor /usr/local/bin && \
-    # Remove build tools
-    apk del build-base curl emacs ocaml && \
-    # Remove tmp files and caches
-    rm -rf /var/cache/apk/* && \
-    rm -rf /tmp/unison-${UNISON_VERSION} && \
-    deluser xfs
+FROM ubuntu:latest AS builder
+
+MAINTAINER Igor Goltsov <igor@ecomgems.com>
+
+# Prepare build machine
+RUN apt update && apt install --assume-yes build-essential curl git
+
+# Build proper OCAML environment
+ARG OCAML_VERSION
+RUN curl -L http://caml.inria.fr/pub/distrib/ocaml-$(echo ${OCAML_VERSION} | cut -c1-4)/ocaml-${OCAML_VERSION}.tar.gz | tar xzv -C /tmp \
+    && cd /tmp/ocaml-${OCAML_VERSION} \
+    && ./configure \
+    && make world \
+    && make opt \
+    && umask 022 \
+    && make install \
+    && make clean
+
+# Build proper Unison version
+ARG UNISON_VERSION
+RUN curl -L https://github.com/bcpierce00/unison/archive/v$UNISON_VERSION.tar.gz | tar zxv -C /tmp \
+    && cd /tmp/unison-${UNISON_VERSION} \
+    && curl https://github.com/bcpierce00/unison/commit/23fa1292.diff?full_index=1 -o patch.diff \
+    && git apply patch.diff \
+    && rm patch.diff \
+    && sed -i -e 's/GLIBC_SUPPORT_INOTIFY 0/GLIBC_SUPPORT_INOTIFY 1/' src/fsmonitor/linux/inotify_stubs.c \
+    && make UISTYLE=text NATIVE=true STATIC=true \
+    && cp src/unison src/unison-fsmonitor /usr/local/bin
+
+FROM alpine:edge AS app
+
+# Install necessary software
+RUN apk add --no-cache tzdata bash su-exec tini
 
 # These can be overridden later
-ENV TZ="Europe/Helsinki" \
+ENV TZ="GMT" \
     LANG="C.UTF-8" \
     UNISON_DIR="/data" \
     HOME="/tmp" \
-    ##
-    # Use 1000:1001 as default user
-    ##
     UNISON_USER="unison" \
     UNISON_GROUP="sync" \
     UNISON_UID="1000" \
-    UNISON_GID="1001"
+    UNISON_GID="1000"
 
+WORKDIR /root
 
 # Install unison server script
+COPY --from=builder /usr/local/bin/unison /usr/local/bin
+COPY --from=builder /usr/local/bin/unison-fsmonitor /usr/local/bin
 COPY entrypoint.sh /entrypoint.sh
 
 VOLUME /unison
